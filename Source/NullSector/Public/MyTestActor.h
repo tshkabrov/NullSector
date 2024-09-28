@@ -19,8 +19,16 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	int Ammo = 0;
+	float Health = 100;
+	bool IsDead = false;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+private:
+	void PrintTypes();
+
 };
+

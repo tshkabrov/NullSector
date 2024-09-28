@@ -15,7 +15,8 @@ AMyTestActor::AMyTestActor()
 void AMyTestActor::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	PrintTypes();
 }
 
 // Called every frame
@@ -24,4 +25,12 @@ void AMyTestActor::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 }
+
+void AMyTestActor::PrintTypes() 
+{
+	UE_LOG(LogTemp, Display, TEXT("Begin play"));
+	UE_LOG(LogTemp, Warning, TEXT("Begin play"));
+	UE_LOG(LogTemp, Error, TEXT("Begin play"));
+}
+
 
