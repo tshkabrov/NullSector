@@ -3,6 +3,7 @@
 
 #include "MyTestActor.h"
 #include "Materials/MaterialInstanceDynamic.h"
+#include "TimerManager.h"
 
 // Sets default values
 AMyTestActor::AMyTestActor()
@@ -19,15 +20,15 @@ void AMyTestActor::BeginPlay()
 {
 	Super::BeginPlay();
 
+	//print string
+	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, GetName());
+
 	InitialLocation = GetActorLocation();
 
-	UMaterialInstanceDynamic* DynMaterial = BaseMesh->CreateAndSetMaterialInstanceDynamic(0);
-	if (DynMaterial)
-	{
-		DynMaterial->SetVectorParameterValue("Color", FLinearColor::Yellow);
-	}
-
+	SetColor(GeometryData.Color);
 	PrintTypes();
+
+	GetWorldTimerManager().SetTimer(TimerHandle, this, &AMyTestActor::OnTimerFire, TimerRate, true);
 
 	FTransform Transform = GetActorTransform();
 	FVector Location = Transform.GetLocation();
@@ -73,6 +74,29 @@ void AMyTestActor::PrintTypes()
 	UE_LOG(LogTemp, Display, TEXT("Begin play"));
 	UE_LOG(LogTemp, Warning, TEXT("Begin play"));
 	UE_LOG(LogTemp, Error, TEXT("Begin play"));
+}
+
+void AMyTestActor::SetColor(const FLinearColor& Color)
+{
+	UMaterialInstanceDynamic* DynMaterial = BaseMesh->CreateAndSetMaterialInstanceDynamic(0);
+	if (DynMaterial)
+	{ 
+		DynMaterial->SetVectorParameterValue("Color", Color);
+	}
+}
+
+void AMyTestActor::OnTimerFire()
+{
+	if (++TimerCount <= MaxTimerCount)
+	{
+		const FLinearColor NewColor = FLinearColor::MakeRandomColor();
+		SetColor(NewColor);
+		// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, NewColor, true, FVector2D(1.5f, 1.5f));
+	}
+	else
+	{
+		GetWorldTimerManager().ClearTimer(TimerHandle);
+	}
 }
 
 

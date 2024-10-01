@@ -43,12 +43,17 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* BaseMesh;
 
+	void SetTestActorData(const FGeometryData& Data) { GeometryData = Data; }
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditAnywhere, Category= "Geometry")
+	UPROPERTY(EditAnywhere, Category = "Geometry")
 	FGeometryData GeometryData;
+
+	UPROPERTY(EditAnywhere, Category = "Timer")
+	float TimerRate = 1.0f;
 
 	UPROPERTY(EditAnywhere)
 	int32 Ammo = 0;
@@ -70,5 +75,14 @@ private:
 	void PrintTypes();
 
 	FVector InitialLocation;
+	FTimerHandle TimerHandle;
+
+	const int32 MaxTimerCount = 5;
+	int32 TimerCount = 0;
+
+	void SetColor(const FLinearColor& Color);
+
+	void OnTimerFire();
 };
+
 
